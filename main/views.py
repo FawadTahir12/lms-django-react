@@ -5,7 +5,7 @@ from .serializers import TeacherSerializer, CourseCategorySerializer, CourseSeri
     FavoriteCourseSerializer, StudentAssignmentSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from rest_framework import generics
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.csrf import csrf_exempt
@@ -16,7 +16,8 @@ from rest_framework.permissions import IsAuthenticated
 
 
 # Create your views here.
-
+def index(request):
+    return HttpResponse("Hello World")
 class TeacherList(generics.ListCreateAPIView):
     # def get(self, request):
     #     queryset = models.Teacher.objects.all()
