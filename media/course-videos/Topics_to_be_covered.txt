@@ -1,0 +1,87 @@
+Topics to be covered:
+- Django
+- DRF
+- React
+- NodeJS
+- Python
+- Javascript
+
+
+
+python:
+	- pass by value or pass by refrence
+	- Python is interpreted and compiled language
+		-First Compiled (generates bytecode)
+		- Second interpret 
+	- Memory Management
+		- Garbage Collector
+		- Refrence counting
+	- Namespaces
+		- built in 
+		- global
+		- local
+		- enclosed 
+	- Recursion
+		- Direct Recursion
+		- Indirect Recursion
+	- Closures
+	- IIFE functions:
+		- map()	
+		- reduce()
+		- filter()
+	-Decorator
+	- OOP in python
+		- Basics of OOP
+			- Class
+			- objects
+			- constructor	
+				- parametrized
+				- non-parameterized
+				- default
+			- self parameter
+			- Built in class function
+				- getattr()
+				- setattr()
+				- delattr()
+				- hasattr()
+			- built in class attributes
+				- __dict__
+				- __doc__
+				- __name__
+				- __module__
+				- __bases__
+			- Instance variable and instance method
+			- class variable and class method
+			- setter and getter methods
+			- staticmethod
+		- Inheritance
+			- parent class
+			- child class
+			- constructor in child and parent class
+			- super method
+			- types of inheritence
+				- single level
+				- multi-level
+				- hierarichi 
+				- multiple
+				- hybrid
+			- MRO (Method resolution order)
+		- Encapsulation
+			- why we need Encapsulation	
+			- access modifier (public,private,protected)	
+			- Name mangling
+		- Polymorphism
+			- Method overiding
+			- Method overriding
+		- Nested Classes
+		- Destructor
+		- Class Decorator
+		- Abstraction
+			- Abstract class
+			- abstrct method
+			- interface class
+			- concerete method
+		- Deep Copy
+		- Shallow Copy
+		- Ducktyping
+
