@@ -2,7 +2,7 @@ from django.shortcuts import render
 from .serializers import TeacherSerializer, CourseCategorySerializer, CourseSerializer, CourseChapterSerializer, \
     AllCourseSerializer, TeacherDetailSerializer, StudentSerializer, StudentEnrollSerializer, \
     StudentEnrollPerCourseSerializer, CourseRatingSerializer, InstructorDashboardSerializer, \
-    FavoriteCourseSerializer, StudentAssignmentSerializer
+    FavoriteCourseSerializer, StudentAssignmentSerializer, StudentDashboardSerializer,StudentDetailSerializer, NotificationSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.http import JsonResponse, HttpResponse
@@ -18,6 +18,8 @@ from rest_framework.permissions import IsAuthenticated
 # Create your views here.
 def index(request):
     return HttpResponse("Hello World")
+
+
 class TeacherList(generics.ListCreateAPIView):
     # def get(self, request):
     #     queryset = models.Teacher.objects.all()
@@ -39,7 +41,9 @@ class TeacherDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Teacher.objects.all()
     serializer_class = TeacherSerializer
     # permission_classes = [IsAuthenticated]
-
+class StudentDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.Student.objects.all()
+    serializer_class = StudentDetailSerializer
 
 class TeacherDetailRetrieve(generics.RetrieveAPIView):
     queryset = models.Teacher.objects.all()
@@ -264,10 +268,32 @@ def intructor_change_password(request, teacher_id):
             'message': 'user does not exists'
         })
 
+@csrf_exempt
+def student_change_password(request, student_id):
+    password = request.POST['password']
+    try:
+        instructorExist = models.Student.objects.get(id=student_id)
+        if instructorExist:
+            models.Student.objects.filter(id=student_id).update(password=password)
+            return JsonResponse({
+                'bool': True,
+                'message': 'Password updated successfully'
+            })
+    except ObjectDoesNotExist:
+        return JsonResponse({
+            'bool': False,
+            'message': 'user does not exists'
+        })
+
 
 class InstructorDashboardView(generics.RetrieveAPIView):
     queryset = models.Teacher.objects.all()
     serializer_class = InstructorDashboardSerializer
+
+
+class StudentDashboardView(generics.RetrieveAPIView):
+    queryset = models.Student.objects.all()
+    serializer_class = StudentDashboardSerializer
 
 
 class RecommendedCourses(generics.ListAPIView):
@@ -332,9 +358,20 @@ class StudentAssignmentList(generics.ListCreateAPIView):
         elif 'student_id' in self.kwargs:
             student_id = self.kwargs['student_id']
             student = models.Student.objects.get(pk=student_id)
+            models.Notification.objects.filter(student=student, notif_for='student', notif_subject='assignment').update(notif_read_status=True)
             return models.StudentAssignment.objects.filter(student=student)
 
 
 class UpdateAssignment(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.StudentAssignment.objects.all()
     serializer_class = StudentAssignmentSerializer
+
+class NotificationList(generics.ListCreateAPIView):
+    queryset = models.Notification.objects.all()
+    serializer_class = NotificationSerializer
+
+    def get_queryset(self):
+        if 'student_id' in self.kwargs:
+            student_id = self.kwargs['student_id']
+            student = models.Student.objects.get(pk=student_id)
+            return models.Notification.objects.filter(student=student, notif_for='student', notif_subject='assignment', notif_read_status=False)

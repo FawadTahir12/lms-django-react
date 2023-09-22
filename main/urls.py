@@ -17,6 +17,8 @@ urlpatterns = [
     # Student urls
     path('student/', views.StudentCreateList.as_view()),
     path('student-login/', views.student_login),
+    path('student/<int:pk>', views.StudentDetail.as_view()),
+    path('student-change-password/<int:student_id>', views.student_change_password),
     path('student-enroll/', views.StudentEnrollList.as_view()),
     path('student-enroll-status/<int:course_id>/<int:student_id>', views.studentEnrollStatus),
     path('total-enroll-students-per-course/<int:course_id>/', views.StudentEnrollPerCourse.as_view()),
@@ -24,6 +26,7 @@ urlpatterns = [
     path('fetch-rating-status/<int:course_id>/<int:student_id>', views.studentRatingStatus),
     path('fetch-enrolled-students/<int:teacher_id>/', views.StudentEnrollPerCourse.as_view()),
     path('teacher/dashboard-data/<int:pk>', views.InstructorDashboardView.as_view()),
+    path('student/dashboard-data/<int:pk>', views.StudentDashboardView.as_view()),
     path('fetch-enrolled-courses/<int:student_id>', views.StudentEnrollPerCourse.as_view()),
     path('fetch-recommended-courses/<int:student_id>', views.RecommendedCourses.as_view()),
     path('add-to-favorite-course/', views.FavoriteCoursesList.as_view()),
@@ -33,5 +36,7 @@ urlpatterns = [
     path('student-assignment/<int:student_id>/<int:teacher_id>', views.StudentAssignmentList.as_view()),
     path('my-assignment/<int:student_id>', views.StudentAssignmentList.as_view()),
     path('update-assignment-status/<int:pk>', views.UpdateAssignment.as_view()),
+    path('fetch-all-notifications/<int:student_id>/', views.NotificationList.as_view()),
+    path('save-notifications/', views.NotificationList.as_view()),
 
 ]

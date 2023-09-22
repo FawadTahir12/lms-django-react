@@ -23,6 +23,12 @@ class InstructorDashboardSerializer(serializers.ModelSerializer):
         fields = ['total_teacher_chapters', 'total_teacher_courses', 'total_enrolled_students']
 
 
+class StudentDashboardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Student
+        fields = ['total_enrolled_courses', 'total_favorite_courses', 'complete_assignments', 'pending_assignments']
+
+
 class CourseCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.CourseCategory
@@ -89,6 +95,12 @@ class StudentSerializer(serializers.ModelSerializer):
         return value
 
 
+class StudentDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Student
+        fields = ['id', 'full_name', 'email', 'interests', 'mobile_no', 'username', 'profile_photo']
+
+
 class StudentEnrollSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.StudentCourseEnrollment
@@ -149,7 +161,7 @@ class StudentAssignmentSerializer(serializers.ModelSerializer):
         self.Meta.depth = 0
         if request and request.method == 'GET':
             self.Meta.depth = 1
-        if request and request.method == 'GET' and  'pk' in request.parser_context['kwargs']:
+        if request and request.method == 'GET' and 'pk' in request.parser_context['kwargs']:
             self.Meta.depth = 0
 
     def to_representation(self, instance):
@@ -158,13 +170,19 @@ class StudentAssignmentSerializer(serializers.ModelSerializer):
         if 'pk' in request.parser_context['kwargs']:
             return data
 
-        data["teacher"].pop('password', None)  # Exclude 'password' field from representation
-        data["student"].pop('password', None)  # Exclude 'password' field from representation
-        data["student"].pop('mobile_no', None)  # Exclude 'password' field from representation
-        data["teacher"].pop('mobile_no', None)  # Exclude 'mobile_no' field from representation
-        data["teacher"].pop('qualification', None)  # Exclude 'mobile_no' field from representation
-        data["teacher"].pop('about', None)  # Exclude 'mobile_no' field from representation
-        data["teacher"].pop('profile_photo', None)  # Exclude 'mobile_no' field from representation
+        # data["teacher"].pop('password', None)  # Exclude 'password' field from representation
+        # data["student"].pop('password', None)  # Exclude 'password' field from representation
+        # data["student"].pop('mobile_no', None)  # Exclude 'password' field from representation
+        # data["teacher"].pop('mobile_no', None)  # Exclude 'mobile_no' field from representation
+        # data["teacher"].pop('qualification', None)  # Exclude 'mobile_no' field from representation
+        # data["teacher"].pop('about', None)  # Exclude 'mobile_no' field from representation
+        # data["teacher"].pop('profile_photo', None)  # Exclude 'mobile_no' field from representation
 
         # Exclude 'password' field from representation
         return data
+
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Notification
+        fields = ['id', 'student', 'teacher', 'notif_subject', 'notif_for', 'notif_read_status', 'notif_created_time']

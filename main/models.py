@@ -93,7 +93,24 @@ class Student(models.Model):
     password = models.CharField(max_length=100)
     mobile_no = models.CharField(max_length=20)
     interests = models.TextField()
+    profile_photo = models.ImageField(upload_to='student-profile-imgs/', null=True)
 
+
+    def total_enrolled_courses(self):
+        total_courses = StudentCourseEnrollment.objects.filter(student=self).count()
+        return total_courses
+
+    def total_favorite_courses(self):
+        favorite_courses = FavoriteCourses.objects.filter(student=self).count()
+        return favorite_courses
+
+    def complete_assignments(self):
+        completed_assignents = StudentAssignment.objects.filter(student=self, student_assignment_status=True).count()
+        return completed_assignents
+
+    def pending_assignments(self):
+        pending_assignments = StudentAssignment.objects.filter(student=self, student_assignment_status=False).count()
+        return pending_assignments
     def __str__(self):
         return self.full_name
 
@@ -134,3 +151,13 @@ class StudentAssignment(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Notification(models.Model):
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True)
+    notif_for = models.CharField(max_length=50)
+    notif_subject = models.CharField(max_length=200, null=True)
+    notif_created_time = models.DateTimeField(auto_now_add=True)
+    notif_read_status = models.BooleanField(default=False)
+
